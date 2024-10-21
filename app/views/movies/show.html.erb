@@ -1,0 +1,167 @@
+<div>
+      <div class="container mx-auto px-4 py-8">
+        <button
+          class="mb-4 bg-blue-500 text-white px-4 py-2 rounded"
+          <%
+=begin%>
+ onClick={() => navigate(-1)} 
+<%
+=end%>
+        >
+          Back
+        </button>
+
+        <div class="relative bg-gray-800 rounded-lg shadow-md overflow-hidden">
+          <div class="relative min-h-[30rem] sm:min-h-[35rem] lg:min-h-[40rem]">
+            <img
+              src="https://image.tmdb.org/t/p/w1280<%= @movie["backdrop_path"] %>" alt="<%= @movie["original_title"] %>"
+              class="w-full h-full object-cover filter blur-lg"
+            />
+
+            <div class="absolute top-1/2 left-1/2 sm:left-8 transform -translate-y-1/2 -translate-x-1/2 sm:translate-x-0">
+              <img
+                src="https://image.tmdb.org/t/p/w300<%= @movie["backdrop_path"] %>" alt="<%= @movie["original_title"] %>"
+                class="w-40 sm:w-48 rounded-lg shadow-lg"
+              />
+            </div>
+
+            <div class="absolute top-3/4 left-1/2 sm:left-64 transform -translate-y-1/2 -translate-x-1/2 sm:translate-x-0 text-white p-4 text-center sm:text-left">
+              <h3 class="text-xl sm:text-3xl font-bold mb-4">
+                <%= @movie["original_title"] %>
+              </h3>
+              <p class="text-md sm:text-lg mb-4 text-gray-300">
+                Rating: <%= @movie["vote_average"].round(1) %>
+              </p> 
+
+
+              <a
+                href="https://www.youtube.com/results?search_query=<%=@movie["original_title"]%>+trailer" 
+                target="_blank"
+                rel="noopener noreferrer"
+                class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-300"
+              >
+                Watch Trailer
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 p-4 bg-gray-900 text-white rounded-lg shadow-md">
+          <h3 class="text-2xl font-semibold mb-4">Overview</h3>
+          <p class="mb-4"><%= @movie["overview"] %></p>
+
+         <div class="block">
+            <p class="text-gray-400">
+              <strong>Release Date:</strong> <%= @movie["release_date"] %>
+            </p>
+            <p class="text-gray-400">
+              <strong>Runtime:</strong> <%= @movie["runtime"] %> minutes
+            </p>
+            <p class="text-gray-400">
+             <strong>Genres:</strong>
+             <% @movie["genres"].each_with_index do |genre, index| %>
+             <span><%= genre["name"] %></span><%= ',' unless index == @movie["genres"].length - 1 %>
+            <% end %>
+            </p>
+            <p class="text-gray-400">
+              <strong>Status:</strong> <%= @movie["status"] %>
+            </p>
+            <p class="text-gray-400 flex text-lg">
+              <strong>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  stroke="none"
+                  class="w-6 h-6"
+                >
+                  <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                </svg>
+              </strong>
+              : <%= @movie["vote_average"].round(1) %>
+            </p>
+          </div>
+        </div>
+
+        <%
+=begin%>
+ <div class="mt-8 p-4 bg-gray-800 text-white rounded-lg shadow-md">
+          <h3 class="text-2xl font-semibold mb-4">Reviews</h3>
+
+          {reviews.length > 0 ? (
+            <div class="space-y-8">
+              {reviews.map((review) => (
+                <div key={review.id} class="border-b border-gray-700 pb-4">
+                  <div class="flex items-start gap-4">
+                    {/* User Avatar */}
+                    <img
+                      src={getAvatar(review.author_details)}
+                      alt={review.author}
+                      class="w-12 h-12 rounded-full object-cover"
+                    />
+
+                    <div class="flex-grow">
+                      <div class="flex justify-between">
+                        <p class="text-sm text-gray-400">
+                          <strong>{review.author}</strong> —{" "}
+                          {new Date(review.created_at).toLocaleDateString()}
+                        </p>
+                        {review.author_details.rating && (
+                          <span class="bg-yellow-500 text-black text-xs font-bold py-1 px-2 rounded">
+                            {review.author_details.rating}/10
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Review Content */}
+                      <p class="mt-2 text-gray-300">{review.content}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p class="text-gray-400">No reviews available.</p>
+          )}
+        </div> 
+<%
+=end%>
+
+        <form
+          class="mt-8 p-4 bg-gray-900 text-white rounded-lg shadow-md "
+        >
+          <h3 class="text-xl font-semibold mb-4 ">Leave a review</h3>
+          <div class="flex flex-col  text-gray-100 space-y-4 lg:mx-20 lg:mr-40 md:mx-10 sm:mx-5">
+            <input
+              type="text"
+              name="username"
+              placeholder="Enter your username"
+              class="px-2 py-2 rounded-md bg-gray-800"
+            />
+            <textarea
+              name="content"
+              rows={6}
+              placeholder="Write a comment"
+              class="px-2 py-2 rounded-md resize-none bg-gray-800"
+            ></textarea>
+            <input
+              type="number"
+              name="rating"
+              placeholder="Rate this @movie (0 - 10)"
+              min={0}
+              max={10}
+              class="px-2 py-2 rounded-md bg-gray-800"
+            />
+            <span>
+              <button
+                type="submit"
+                class="mb-4 bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Send
+              </button>
+            </span>
+          </div>
+        </form> 
+
+      </div>
+    </div>

@@ -1,0 +1,27 @@
+<div class="flex justify-between">
+    <h2 class="text-4xl bold ml-12">Top Rated</h2>
+</div>
+
+<div class="container mx-auto px-4 py-8">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+
+        <% @movies.each do |i| %>
+        <a href="<%= movie_path(i["id"])%>">
+            <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden transform transition duration-500 hover:scale-105 hover:bg-gray-700">
+                <div class="relative overflow-hidden">
+                    <img src="https://image.tmdb.org/t/p/w200<%= i["poster_path"] %>" alt="<%= i["original_title"] %>" class="w-full h-64 object-cover transform transition-transform duration-500 hover:scale-110">
+                </div>
+                <div class="p-4 text-white">
+                    <h3 class="text-lg font-semibold mb-2">
+                        <%= i["original_title"] %>
+                    </h3>
+                    <p class="text-sm text-gray-300">
+                        Rating:  <%= i["vote_average"].round(1) %>
+                    </p>
+                </div>
+            </div>
+        </a>
+            
+        <% end %>
+    </div>
+</div>
