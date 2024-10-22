@@ -60,3 +60,5 @@ end
 
 gem "http", "~> 5.2"
 gem "dotenv", groups: [ :development, :test ]
+
+gem "simple_form", "~> 5.3"

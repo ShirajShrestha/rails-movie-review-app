@@ -2,13 +2,8 @@
       <div class="container mx-auto px-4 py-8">
         <button
           class="mb-4 bg-blue-500 text-white px-4 py-2 rounded"
-          <%
-=begin%>
- onClick={() => navigate(-1)} 
-<%
-=end%>
         >
-          Back
+        <%= link_to "Back", :back %>
         </button>
 
         <div class="relative bg-gray-800 rounded-lg shadow-md overflow-hidden">
@@ -20,7 +15,7 @@
 
             <div class="absolute top-1/2 left-1/2 sm:left-8 transform -translate-y-1/2 -translate-x-1/2 sm:translate-x-0">
               <img
-                src="https://image.tmdb.org/t/p/w300<%= @movie["backdrop_path"] %>" alt="<%= @movie["original_title"] %>"
+                src="https://image.tmdb.org/t/p/w300<%= @movie["poster_path"] %>" alt="<%= @movie["original_title"] %>"
                 class="w-40 sm:w-48 rounded-lg shadow-lg"
               />
             </div>
@@ -57,12 +52,7 @@
             <p class="text-gray-400">
               <strong>Runtime:</strong> <%= @movie["runtime"] %> minutes
             </p>
-            <p class="text-gray-400">
-             <strong>Genres:</strong>
-             <% @movie["genres"].each_with_index do |genre, index| %>
-             <span><%= genre["name"] %></span><%= ',' unless index == @movie["genres"].length - 1 %>
-            <% end %>
-            </p>
+            
             <p class="text-gray-400">
               <strong>Status:</strong> <%= @movie["status"] %>
             </p>
@@ -83,85 +73,67 @@
           </div>
         </div>
 
-        <%
-=begin%>
- <div class="mt-8 p-4 bg-gray-800 text-white rounded-lg shadow-md">
-          <h3 class="text-2xl font-semibold mb-4">Reviews</h3>
+        <% @review = Review.new%>
+        <%= simple_form_for @review, url: reviews_path, method: :post, html: { class: "mt-8 p-4 bg-gray-900 text-white rounded-lg shadow-md" } do |f| %>
+          <h3 class="text-xl font-semibold mb-4">Leave a review</h3>
+          
+          <div class="flex flex-col text-gray-100 space-y-4 lg:mx-20 lg:mr-40 md:mx-10 sm:mx-5">
+            <div>
+              <%= f.label :UserId, "Enter your Id", class: "block mb-2" %>
+              <%= f.input :user_id, as: :integer, placeholder: "1", input_html: { class: "w-full px-2 py-2 rounded-md resize-none bg-gray-800" }, label: false %>
+            </div>
 
-          {reviews.length > 0 ? (
-            <div class="space-y-8">
-              {reviews.map((review) => (
-                <div key={review.id} class="border-b border-gray-700 pb-4">
-                  <div class="flex items-start gap-4">
-                    {/* User Avatar */}
-                    <img
-                      src={getAvatar(review.author_details)}
-                      alt={review.author}
-                      class="w-12 h-12 rounded-full object-cover"
-                    />
+            <div>
+              <%= f.label :comment, "Write a comment", class: "block mb-2" %>
+              <%= f.input :comment, as: :text, placeholder: "This movie is awesome!", input_html: { rows: 6, class: "w-full px-2 py-2 rounded-md resize-none bg-gray-800" }, label: false %>
+            </div>
+            
+            <div>
+              <%= f.label :rating, "Rating", class: "block mb-2" %>
+              <%= f.input :rating, as: :integer, placeholder:"Rate this movie from 1 to 10", input_html: { min: 0, max: 10, class: "w-full px-2 py-2 rounded-md bg-gray-800" }, label: false %>
+            </div>
 
-                    <div class="flex-grow">
-                      <div class="flex justify-between">
-                        <p class="text-sm text-gray-400">
-                          <strong>{review.author}</strong> —{" "}
-                          {new Date(review.created_at).toLocaleDateString()}
-                        </p>
-                        {review.author_details.rating && (
-                          <span class="bg-yellow-500 text-black text-xs font-bold py-1 px-2 rounded">
-                            {review.author_details.rating}/10
+            <div class="hidden" ><%= f.input :movie_id, as: :integer, input_html:{value: @movie["id"]} %></div>
+
+
+            <div>
+              <%= f.button :submit, "Send", class: "mb-4 bg-blue-500 text-white px-4 py-2 rounded" %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="mt-8 bg-gray-800 text-white rounded-lg shadow-md">
+          <h3 class="mt-8 p-4 text-2xl font-semibold">Comments</h3>
+          <% if @reviews.any? %>
+            <% @reviews.each do |review| %>
+              <div class="border-b border-gray-700 lg:px-16 pb-4">
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 p-2 rounded-full flex justify-center items-center text-white text-3xl bg-blue-500">
+                    <%= review.user.username[0].upcase %>
+                  </div>
+
+                  <div class="flex-grow">
+                    <div class="flex justify-between">
+                      <p class="text-sm text-gray-400 w-full flex justify-between items-center">
+                        <strong><%= review.user.username %></strong>
+
+                        <% if review.rating.present? %>
+                          <span class="bg-yellow-500 text-black text-xs font-bold py-1 px-2 rounded lg:mr-16">
+                            <%= review.rating %>/10
                           </span>
-                        )}
-                      </div>
-
-                      {/* Review Content */}
-                      <p class="mt-2 text-gray-300">{review.content}</p>
+                        <% end %>
+                      </p>
                     </div>
+
+                    <p class="mt-2 text-gray-300"><%= review.comment %></p>
                   </div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <p class="text-gray-400">No reviews available.</p>
-          )}
-        </div> 
-<%
-=end%>
-
-        <form
-          class="mt-8 p-4 bg-gray-900 text-white rounded-lg shadow-md "
-        >
-          <h3 class="text-xl font-semibold mb-4 ">Leave a review</h3>
-          <div class="flex flex-col  text-gray-100 space-y-4 lg:mx-20 lg:mr-40 md:mx-10 sm:mx-5">
-            <input
-              type="text"
-              name="username"
-              placeholder="Enter your username"
-              class="px-2 py-2 rounded-md bg-gray-800"
-            />
-            <textarea
-              name="content"
-              rows={6}
-              placeholder="Write a comment"
-              class="px-2 py-2 rounded-md resize-none bg-gray-800"
-            ></textarea>
-            <input
-              type="number"
-              name="rating"
-              placeholder="Rate this @movie (0 - 10)"
-              min={0}
-              max={10}
-              class="px-2 py-2 rounded-md bg-gray-800"
-            />
-            <span>
-              <button
-                type="submit"
-                class="mb-4 bg-blue-500 text-white px-4 py-2 rounded"
-              >
-                Send
-              </button>
-            </span>
-          </div>
-        </form> 
+              </div>
+            <% end %>
+          <% else %>
+            <p class="p-8 text-gray-400">No comments available yet</p>
+          <% end %>
+        </div>
 
       </div>
     </div>
