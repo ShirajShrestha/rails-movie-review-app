@@ -1,0 +1,4 @@
+<%= turbo_stream.prepend "reviews" do %>
+    <%= render partial: "shared/comments", locals: {review: @review} %>
+<%end%>
+
