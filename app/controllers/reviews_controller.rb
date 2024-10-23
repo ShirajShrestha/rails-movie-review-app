@@ -1,4 +1,7 @@
 class ReviewsController < ApplicationController
+  def index
+    @reviews = Review.ordered
+  end
   def new
     @review = Review.new
   end
@@ -10,7 +13,20 @@ class ReviewsController < ApplicationController
     end
 
     if @review.save
-      redirect_to movie_path(@review.movie.tmdb_id)
+      respond_to do |format|
+        format.html { redirect_to movie_path(@review.movie.tmdb_id) }
+        format.turbo_stream
+      end
+    end
+  end
+
+  def destroy
+    @review = Review.find(params[:id])
+    @review.destroy
+
+    respond_to do  |format|
+      format.html { redirect_to movie_path(@review.movie.tmdb_id) }
+      format.turbo_stream
     end
   end
 
