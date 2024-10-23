@@ -106,7 +106,7 @@
           <h3 class="mt-8 p-4 text-2xl font-semibold">Comments</h3>
           <% if @reviews.any? %>
             <% @reviews.each do |review| %>
-              <div class="border-b border-gray-700 lg:px-16 pb-4">
+              <div class="border-b border-gray-700 lg:px-16 py-4">
                 <div class="flex items-start gap-4">
                   <div class="w-12 h-12 p-2 rounded-full flex justify-center items-center text-white text-3xl bg-blue-500">
                     <%= review.user.username[0].upcase %>
