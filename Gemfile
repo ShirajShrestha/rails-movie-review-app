@@ -63,4 +63,4 @@ gem "dotenv", groups: [ :development, :test ]
 
 gem "simple_form", "~> 5.3"
 
-gem "active_model_serializers", "~> 0.10.14"
+gem "active_model_serializers", "~> 0.10.15"
