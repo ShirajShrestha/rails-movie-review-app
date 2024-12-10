@@ -1,24 +1,39 @@
-# README
+# Movie Review
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Movie review app as the name suggests, is an app to give review of the movies you've watched. You can find all the latest movies along with all the comments done by other users.
 
-Things you may want to cover:
+### Features
 
-* Ruby version
+- Find the details and comment of the movies.
+- Post your own review for the movie.
+- Get the API for these movies
 
-* System dependencies
+## Usage
 
-* Configuration
+You can download the zip file to use the project or you can clone this repo:
 
-* Database creation
+```bash
+https://github.com/ShirajShrestha/rails-movie-review-app.git
+```
 
-* Database initialization
+Navigate to the folder using:
 
-* How to run the test suite
+```bash
+cd rails-movie-review-app
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+Install all the dependencies using following command:
 
-* Deployment instructions
+```bash
+bundle install
+```
 
-* ...
+Run the project using
+
+```bash
+rails server
+```
+
+## Contributing
+
+Bug reports and pull requests are welcome on GitHub at https://github.com/ShirajShrestha/rails-movie-review-app
